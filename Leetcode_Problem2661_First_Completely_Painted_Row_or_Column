@@ -1,0 +1,28 @@
+/* O(3*M*N), use hash to record index */
+int firstCompleteIndex(int* arr, int arrSize, int** mat, int matSize, int* matColSize){
+    int rlen = matSize, clen = *matColSize, maxIdx, minIdx = INT_MAX;
+    int* hashIdxMapping = (int*)calloc(rlen*clen+1, sizeof(int));
+    for(int i = 0; i < arrSize; i++)
+        hashIdxMapping[arr[i]] = i;/* put index in */
+    /* check per row */
+    for(int i = 0; i < rlen; i++)
+    {
+        maxIdx = -1;
+        for(int j = 0; j < clen; j++)
+            if(hashIdxMapping[mat[i][j]] > maxIdx)
+                maxIdx = hashIdxMapping[mat[i][j]];
+        if(maxIdx < minIdx)
+            minIdx = maxIdx;
+    }
+    /* check per column */
+    for(int i = 0; i < clen; i++)
+    {
+        maxIdx = -1;
+        for(int j = 0; j < rlen; j++)
+            if(hashIdxMapping[mat[j][i]] > maxIdx)
+                maxIdx = hashIdxMapping[mat[j][i]];
+        if(maxIdx < minIdx)
+            minIdx = maxIdx;
+    }    
+    return minIdx;
+}
